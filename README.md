@@ -1,4 +1,4 @@
-A simple todo list app to keep track of tasks. At a high level, the app should be able to do the following things:
+A todo list app to keep track of tasks. The app does the following things:
 
 - Create a new task
 - Check off a completed task
