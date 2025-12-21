@@ -27,7 +27,7 @@ import type { RequestHandler } from "express";
  * handler in `src/app.ts`.
  */
 export const getTask: RequestHandler = async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.params; // req.param is the header, id in the header
 
   try {
     const task = await TaskModel.findById(id);
