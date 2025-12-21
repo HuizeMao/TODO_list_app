@@ -30,25 +30,18 @@ export const getTask: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    // if the ID doesn't exist, then findById returns null
     const task = await TaskModel.findById(id);
 
     if (task === null) {
       throw createHttpError(404, "Task not found.");
     }
 
-    // Set the status code (200) and body (the task object as JSON) of the response.
-    // Note that you don't need to return anything, but you can still use a return
-    // statement to exit the function early.
     res.status(200).json(task);
   } catch (error) {
-    // pass errors to the error handler
     next(error);
   }
 };
 
-// Define a custom type for the request body so we can have static typing
-// for the fields
 type CreateTaskBody = {
   title: string;
   description?: string;
@@ -56,12 +49,10 @@ type CreateTaskBody = {
 };
 
 export const createTask: RequestHandler = async (req, res, next) => {
-  // extract any errors that were found by the validator
   const errors = validationResult(req);
   const { title, description, isChecked } = req.body as CreateTaskBody;
 
   try {
-    // if there are errors, then this function throws an exception
     validationErrorParser(errors);
 
     const task = await TaskModel.create({
@@ -71,8 +62,6 @@ export const createTask: RequestHandler = async (req, res, next) => {
       dateCreated: Date.now(),
     });
 
-    // 201 means a new resource has been created successfully
-    // the newly created task is sent back to the user
     res.status(201).json(task);
   } catch (error) {
     next(error);
@@ -103,7 +92,6 @@ export const updateTask: RequestHandler = async (req, res, next) => {
   const { _id, title, description, isChecked } = req.body as UpdateTaskBody;
   const { id } = req.params;
   try {
-    // your code here
     validationErrorParser(errors);
     if (id !== _id) return res.status(400);
 

@@ -1,5 +1,5 @@
 import { Dialog } from "@tritonse/tse-constellation";
-import React, { useState } from "react"; // update this line
+import React, { useState } from "react";
 import { updateTask } from "src/api/tasks";
 import { CheckButton } from "src/components";
 import styles from "src/components/TaskItem.module.css";
@@ -24,8 +24,6 @@ export function TaskItem({ task: initialTask }: TaskItemProps) {
     }
     setLoading(false);
   };
-
-  // ...
 
   let base_class = styles.textContainer;
   if (task.isChecked) base_class += ` ${styles.checked}`;
