@@ -90,3 +90,30 @@ export const removeTask: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+type UpdateTaskBody = {
+  _id: string;
+  title: string;
+  description?: string;
+  isChecked?: boolean;
+};
+
+export const updateTask: RequestHandler = async (req, res, next) => {
+  const errors = validationResult(req);
+  const { _id, title, description, isChecked } = req.body as UpdateTaskBody;
+  const { id } = req.params;
+  try {
+    // your code here
+    validationErrorParser(errors);
+    if (id !== _id) return res.status(400);
+
+    const result = await TaskModel.findByIdAndUpdate(id, { title, description, isChecked });
+    if (result === null) return res.status(404);
+    else {
+      const task = await TaskModel.findById(id);
+      return res.status(200).json(task);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
