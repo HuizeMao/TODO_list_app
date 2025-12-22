@@ -1,5 +1,6 @@
 import { Dialog } from "@tritonse/tse-constellation";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { updateTask } from "src/api/tasks";
 import { CheckButton } from "src/components";
 import styles from "src/components/TaskItem.module.css";
@@ -39,7 +40,9 @@ export function TaskItem({ task: initialTask }: TaskItemProps) {
         />
       }
       <div className={base_class}>
-        <span>{task.title}</span>
+        <Link to={`/task/${task._id}`} className={styles.title_link}>
+          {task.title}
+        </Link>
         {task.description && <span>{task.description}</span>}
       </div>
 

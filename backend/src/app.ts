@@ -7,7 +7,8 @@ import cors from "cors";
 import express from "express";
 import { isHttpError } from "http-errors";
 import taskRoutes from "src/routes/task";
-import tasksRoutes from "src/routes/tasks"; // add this line
+import tasksRoutes from "src/routes/tasks";
+import userRoutes from "src/routes/user";
 
 import type { NextFunction, Request, Response } from "express";
 
@@ -15,6 +16,7 @@ const app = express();
 
 // initializes Express to accept JSON in the request/response body
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // sets the "Access-Control-Allow-Origin" header on all responses to allow
 // requests from the frontend, which has a different origin - see the following
@@ -29,7 +31,7 @@ app.use(
 
 app.use("/api/task", taskRoutes);
 app.use("/api/tasks", tasksRoutes); // add this line
-
+app.use("/api/user", userRoutes);
 /**
  * Error handler; all errors thrown by server are handled here.
  * Explicit typings required here because TypeScript cannot infer the argument types.
