@@ -30,7 +30,7 @@ export const getTask: RequestHandler = async (req, res, next) => {
   const { id } = req.params; // req.param is the header, id in the header
 
   try {
-    const task = await TaskModel.findById(id);
+    const task = await TaskModel.findById(id).populate("assignee");
 
     if (task === null) {
       throw createHttpError(404, "Task not found.");
@@ -46,11 +46,12 @@ type CreateTaskBody = {
   title: string;
   description?: string;
   isChecked?: boolean;
+  assignee?: string;
 };
 
 export const createTask: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
-  const { title, description, isChecked } = req.body as CreateTaskBody;
+  const { title, description, isChecked, assignee } = req.body as CreateTaskBody;
 
   try {
     validationErrorParser(errors);
@@ -60,7 +61,10 @@ export const createTask: RequestHandler = async (req, res, next) => {
       description,
       isChecked,
       dateCreated: Date.now(),
+      assignee,
     });
+
+    await task.populate("assignee");
 
     res.status(201).json(task);
   } catch (error) {
@@ -85,20 +89,26 @@ type UpdateTaskBody = {
   title: string;
   description?: string;
   isChecked?: boolean;
+  assignee?: string;
 };
 
 export const updateTask: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
-  const { _id, title, description, isChecked } = req.body as UpdateTaskBody;
+  const { _id, title, description, isChecked, assignee } = req.body as UpdateTaskBody;
   const { id } = req.params;
   try {
     validationErrorParser(errors);
     if (id !== _id) return res.status(400);
 
-    const result = await TaskModel.findByIdAndUpdate(id, { title, description, isChecked });
+    const result = await TaskModel.findByIdAndUpdate(id, {
+      title,
+      description,
+      isChecked,
+      assignee,
+    });
     if (result === null) return res.status(404);
     else {
-      const task = await TaskModel.findById(id);
+      const task = await TaskModel.findById(id).populate("assignee");
       return res.status(200).json(task);
     }
   } catch (error) {

@@ -1,7 +1,7 @@
 import { get, handleAPIError, post, put } from "src/api/requests";
 
 import type { APIResult } from "src/api/requests";
-
+import type { User } from "src/api/users.ts";
 /**
  * Defines the "shape" of a Task object (what fields are present and their types) for
  * frontend components to use. This will be the return type of most functions in this
@@ -13,6 +13,7 @@ export type Task = {
   description?: string;
   isChecked: boolean;
   dateCreated: Date;
+  assignee?: User;
 };
 
 /**
@@ -30,6 +31,7 @@ type TaskJSON = {
   description?: string;
   isChecked: boolean;
   dateCreated: string;
+  assignee?: User;
 };
 
 /**
@@ -57,6 +59,7 @@ function parseTask(task: TaskJSON): Task {
 export type CreateTaskRequest = {
   title: string;
   description?: string;
+  assignee?: string;
 };
 
 /**
@@ -69,6 +72,7 @@ export type UpdateTaskRequest = {
   description?: string;
   isChecked: boolean;
   dateCreated: Date;
+  assignee?: string;
 };
 
 /**
